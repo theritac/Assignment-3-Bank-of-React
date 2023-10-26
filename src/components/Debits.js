@@ -15,7 +15,7 @@ const Debits = (props) => {
 
     const newDebit = {
       description: event.target.description.value,
-      amount: parseFloat(event.target.amount.value),
+      amount: parseFloat(event.target.amount.value).toFixed(2),
       date: new Date().toISOString()
     }
 
@@ -42,8 +42,7 @@ const Debits = (props) => {
 
       <form onSubmit={submissionDebit}>
         <input type="text" name="description" />
-        <input type="number" name="amount" />
-
+        <input type="number" step="any" name="amount" />
         <button type="submit">Add Debit</button>
       </form>
       <br />
