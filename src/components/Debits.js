@@ -8,6 +8,19 @@ import {Link} from 'react-router-dom';
 
 const Debits = (props) => {
   // Create the list of Debit items
+    const submissionDebit = (event) => {
+    event.preventDefault()
+
+    const newDebit = {
+      description: event.target.description.value,
+      amount: parseFloat(event.target.amount.value),
+      date: new Date().toISOString()
+    }
+
+    props.addDebit(newDebit);
+    event.target.reset()
+  }
+  
   let debitsView = () => {
     const { debits } = props;
     return debits.map((debit) => {  // Extract "id", "amount", "description" and "date" properties of each debits JSON array element
