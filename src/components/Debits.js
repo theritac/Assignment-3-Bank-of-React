@@ -6,14 +6,6 @@ Note: You need to work on this file for the Assignment.
 ==================================================*/
 import { Link } from 'react-router-dom';
 
-// //add debit card information
-// const addDebit = () => {
-//   this.setState(state => {
-//     return {
-//       description: state.
-//     }
-//   })
-// }
 
 const Debits = (props) => {
   // Create the list of Debit items
