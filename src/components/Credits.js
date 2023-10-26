@@ -13,7 +13,7 @@ const Credits = (props) => {
 
       const newCredit = {
         description: event.target.description.value,
-        amount: parseFloat(event.target.amount.value),
+        amount: parseFloat(event.target.amount.value).toFixed(2),
         date: new Date().toISOString()
       }
 
@@ -37,7 +37,7 @@ const Credits = (props) => {
 
       <form onSubmit={submissionCredit}>
         <input type="text" name="description" />
-        <input type="number" name="amount" />
+        <input type="number" step="any" name="amount" />
         <button type="submit">Add Credit</button>
       </form>
       <br/>
