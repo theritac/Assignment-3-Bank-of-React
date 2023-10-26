@@ -9,17 +9,17 @@ import {Link} from 'react-router-dom';
 const Debits = (props) => {
   // Create the list of Debit items
     const submissionDebit = (event) => {
-    event.preventDefault()
+      event.preventDefault()
 
-    const newDebit = {
-      description: event.target.description.value,
-      amount: parseFloat(event.target.amount.value),
-      date: new Date().toISOString()
+      const newDebit = {
+        description: event.target.description.value,
+        amount: parseFloat(event.target.amount.value),
+        date: new Date().toISOString()
+      }
+
+      props.addDebit(newDebit);
+      event.target.reset()
     }
-
-    props.addDebit(newDebit);
-    event.target.reset()
-  }
   
   let debitsView = () => {
     const { debits } = props;
@@ -35,7 +35,7 @@ const Debits = (props) => {
 
       {debitsView()}
 
-      <form onSubmit={props.addDebit}>
+      <form onSubmit={submissionDebit}>
         <input type="text" name="description" />
         <input type="number" name="amount" />
         <button type="submit">Add Debit</button>
