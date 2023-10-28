@@ -28,13 +28,25 @@ const Debits = (props) => {
       return <li key={debits.id}>{debits.amount} {debits.description} {date}</li>
     });
   }
+  //calculate amount from debitList
+  let calculateDebit = () => {
+    const { debits } = props;
+    let totalDebit = 0;
+    
+    
+    for (const debit of debits) {
+    totalDebit += parseFloat(debit.amount);
+    }
+    return <p>Total Debit: ${totalDebit.toFixed(2)} </p>
+    }
+    
   // Render the list of Debit items and a form to input new Debit item
   return (
     <div>
       <h1>Debits</h1>
 
       {debitsView()}
-
+      {calculateDebit()}
       <form onSubmit={submissionDebit}>
         <input type="text" name="description" />
         <input type="number" step="any" name="amount" />
