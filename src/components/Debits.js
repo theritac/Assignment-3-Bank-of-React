@@ -14,7 +14,7 @@ const Debits = (props) => {
 
   const submissionDebit = (event) => {
     event.preventDefault()
-    newBalance = (balance - parseFloat(event.target.amount.value).toFixed(2));
+    newBalance = (balance - parseFloat(event.target.amount.value)).toFixed(2);
     const newDebit = {
       id: debits.length + 1,
       description: event.target.description.value,
