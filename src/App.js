@@ -4,8 +4,8 @@ src/App.js
 This is the top-level component of the app.
 It contains the top-level state.
 ==================================================*/
-import React, {Component} from 'react';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import axios from 'axios';
 // Import other components
 import Home from './components/Home';
@@ -16,7 +16,7 @@ import Debits from './components/Debits';
 
 class App extends Component {
   constructor() {  // Create and initialize state
-    super(); 
+    super();
     this.state = {
       accountBalance: 1234567.89,
       creditList: [],
@@ -26,6 +26,10 @@ class App extends Component {
         memberSince: '11/22/99',
       }
     };
+  }
+
+  updateAccountBalance = (newBalance) => {
+    this.setState({ accountBalance: newBalance });
   }
 
   //adding new debit card into the list
@@ -40,7 +44,7 @@ class App extends Component {
     this.setState((prevState) => ({
       creditList: [...prevState.creditList, newCredit],
     }));
-    
+
   }
 
   //API request to get credit and debit info
@@ -51,14 +55,16 @@ class App extends Component {
       let cresponse = await axios.get(linkToCreditAPI);
       console.log(cresponse);  // Print out response
       // To get data object in the response, need to use "response.data"
-      this.setState({creditList: cresponse.data});  // Store received data in state's "users" object
-    } 
+      this.setState({ creditList: cresponse.data });  // Store received data in state's "users" object
+      const totalCreditBalance = cresponse.data.reduce((total, credit) => total + credit.amount, 0);
+      this.updateAccountBalance(totalCreditBalance);
+    }
     catch (error) {  // Print out errors at console when there is an error response
       if (error.cresponse) {
         // The request was made, and the server responded with error message and status code.
         console.log(error.cresponse.data);  // Print out error message (e.g., Not Found)
         console.log(error.cresponse.status);  // Print out error status code (e.g., 404)
-      }    
+      }
     }
 
     //link to second API
@@ -67,44 +73,48 @@ class App extends Component {
       let dresponse = await axios.get(linkToDeditAPI);
       console.log(dresponse);  // Print out response
       // To get data object in the response, need to use "response.data"
-      this.setState({debitList: dresponse.data});  // Store received data in state's "users" object
-    } 
+      this.setState({ debitList: dresponse.data });  // Store received data in state's "users" object
+      const totalDebitBalance = dresponse.data.reduce((total, debit) => total + debit.amount, 0);
+
+      // Subtract the total debit from the initial account balance
+      const newAccountBalance = this.state.accountBalance - totalDebitBalance;
+      this.updateAccountBalance(newAccountBalance);
+    }
     catch (error) {  // Print out errors at console when there is an error response
       if (error.dresponse) {
         // The request was made, and the server responded with error message and status code.
         console.log(error.dresponse.data);  // Print out error message (e.g., Not Found)
         console.log(error.dresponse.status);  // Print out error status code (e.g., 404)
-      }    
+      }
     }
   }
 
   // Update state's currentUser (userName) after "Log In" button is clicked
-  mockLogIn = (logInInfo) => {  
-    const newUser = {...this.state.currentUser};
+  mockLogIn = (logInInfo) => {
+    const newUser = { ...this.state.currentUser };
     newUser.userName = logInInfo.userName;
-    this.setState({currentUser: newUser})
+    this.setState({ currentUser: newUser })
   }
 
   // Create Routes and React elements to be rendered using React components
-  render() {  
+  render() {
     // Create React elements and pass input props to components
     const HomeComponent = () => (<Home accountBalance={this.state.accountBalance} />)
     const UserProfileComponent = () => (
       <UserProfile userName={this.state.currentUser.userName} memberSince={this.state.currentUser.memberSince} />
     )
     const LogInComponent = () => (<LogIn user={this.state.currentUser} mockLogIn={this.mockLogIn} />)
-    const CreditsComponent = () => (<Credits credits={this.state.creditList} addCredit = {this.addCredit}/>) 
-    const DebitsComponent = () => (<Debits debits={this.state.debitList} addDebit = {this.addDebit}/>) 
-
+    const CreditsComponent = () => (<Credits credits={this.state.creditList} balance={this.state.accountBalance} addCredit={this.addCredit} updateAccountBalance={this.updateAccountBalance} />)
+    const DebitsComponent = () => (<Debits debits={this.state.debitList} balance={this.state.accountBalance} addDebit={this.addDebit} updateAccountBalance={this.updateAccountBalance} />)
     // Important: Include the "basename" in Router, which is needed for deploying the React app to GitHub Pages
     return (
       <Router basename="/bank-of-react-starter-code">
         <div>
-          <Route exact path="/" render={HomeComponent}/>
-          <Route exact path="/userProfile" render={UserProfileComponent}/>
-          <Route exact path="/login" render={LogInComponent}/>
-          <Route exact path="/credits" render={CreditsComponent}/>
-          <Route exact path="/debits" render={DebitsComponent}/>
+          <Route exact path="/" render={HomeComponent} />
+          <Route exact path="/userProfile" render={UserProfileComponent} />
+          <Route exact path="/login" render={LogInComponent} />
+          <Route exact path="/credits" render={CreditsComponent} />
+          <Route exact path="/debits" render={DebitsComponent} />
         </div>
       </Router>
     );
