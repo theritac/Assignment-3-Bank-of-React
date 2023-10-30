@@ -28,6 +28,9 @@ class App extends Component {
     };
   }
 
+  updateAccountBalance = (newBalance) => {
+    this.setState({ accountBalance: newBalance });
+  }
   //adding new debit card into the list
   addDebit = (newDebit) => {
     this.setState((prevState) => ({
@@ -52,6 +55,8 @@ class App extends Component {
       console.log(cresponse);  // Print out response
       // To get data object in the response, need to use "response.data"
       this.setState({creditList: cresponse.data});  // Store received data in state's "users" object
+      const totalCreditBalance = cresponse.data.reduce((total, credit) => total + credit.amount, 0);
+      this.updateAccountBalance(totalCreditBalance);
     } 
     catch (error) {  // Print out errors at console when there is an error response
       if (error.cresponse) {
@@ -68,6 +73,11 @@ class App extends Component {
       console.log(dresponse);  // Print out response
       // To get data object in the response, need to use "response.data"
       this.setState({debitList: dresponse.data});  // Store received data in state's "users" object
+      const totalDebitBalance = dresponse.data.reduce((total, debit) => total + debit.amount, 0);
+
+      // Subtract the total debit from the initial account balance
+      const newAccountBalance = this.state.accountBalance - totalDebitBalance;
+      this.updateAccountBalance(newAccountBalance);
     } 
     catch (error) {  // Print out errors at console when there is an error response
       if (error.dresponse) {
@@ -94,7 +104,7 @@ class App extends Component {
     )
     const LogInComponent = () => (<LogIn user={this.state.currentUser} mockLogIn={this.mockLogIn} />)
     const CreditsComponent = () => (<Credits credits={this.state.creditList} addCredit = {this.addCredit}/>) 
-    const DebitsComponent = () => (<Debits debits={this.state.debitList} addDebit = {this.addDebit}/>) 
+    const DebitsComponent = () => (<Debits debits={this.state.debitList} balance={this.state.accountBalance} addDebit={this.addDebit} updateAccountBalance={this.updateAccountBalance} />) 
 
     // Important: Include the "basename" in Router, which is needed for deploying the React app to GitHub Pages
     return (
