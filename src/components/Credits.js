@@ -42,8 +42,8 @@ const Credits = (props) => {
   return (
     <div>
       <h1>Credits</h1>
-      <AccountBalance accountBalance={balance} />
       {creditsView()}
+      <br/>
 
       <form onSubmit={submissionCredit}>
         <input type="text" name="description" />
@@ -51,6 +51,8 @@ const Credits = (props) => {
         <button type="submit">Add Credit</button>
       </form>
       <br />
+      <AccountBalance accountBalance={balance} />
+      <br/>
       <Link to="/">Return to Home</Link>
     </div>
   );
