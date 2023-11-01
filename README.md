@@ -1,8 +1,8 @@
 # Team Members
-Rita Chen - theritac
-Michelle Thaung - michelle-thaung
-Hnin Lwin - hninl23
-Arsen Tumanian - arsent1
+1. Rita Chen - theritac
+2. Michelle Thaung - michelle-thaung
+3. Hnin Lwin - hninl23
+4. Arsen Tumanian - arsent1
 
 ### Live Link 
 [Website link](https://theritac.github.io/Assignment-3-Bank-of-React/)
