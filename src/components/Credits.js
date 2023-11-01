@@ -46,8 +46,8 @@ const Credits = (props) => {
       <br/>
 
       <form onSubmit={submissionCredit}>
-        <input type="text" name="description" />
-        <input type="number" step="any" name="amount" />
+        <input type="text" name="description" required/>
+        <input type="number" step="any" name="amount" required/>
         <button type="submit">Add Credit</button>
       </form>
       <br />
