@@ -11,10 +11,15 @@ const Credits = (props) => {
   const { credits, balance, updateAccountBalance } = props;
   // Create the list of Debit items
   let newBalance = 0;
+  
+  const roundToTwoDecimalPlaces = (value) => {
+    return Math.round(value * 100) / 100;
+  };
 
   const submissionCredit = (event) => {
     event.preventDefault()
-    newBalance = (parseFloat(event.target.amount.value) + balance).toFixed(2);
+    newBalance = roundToTwoDecimalPlaces((parseFloat(event.target.amount.value) + balance));
+
     const newCredit = {
       id: credits.length + 1,
       description: event.target.description.value,
